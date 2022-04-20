@@ -3,6 +3,9 @@
 # 14 April 2022
 # Assumes data has been read and cleaned (sheet 1)
 
+install.packages("moult")
+library(moult)
+
 if (is.numeric(ringing_data$Moult)) {
   scores <- format(ringing_data$Moult, scientific = FALSE, trim = TRUE)
 } else {

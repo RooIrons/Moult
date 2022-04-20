@@ -58,11 +58,12 @@ ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1,2)), aes(as.numeric(Month)
   geom_smooth()+
   facet_grid(.~gender) +xlab("Month")
 
-ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1)), aes(as.numeric(Month), active_moult))+  
+plot1 <- ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1)), aes(as.numeric(Month), active_moult))+  
   geom_smooth() +xlab("Month") + ylab("Active Moult")+theme_bw(base_size = 14)+
   geom_smooth(data = filter(ringing_data, Age==4, Sex%in%c(2)), aes(as.numeric(Month), active_moult), colour="pink", size = 2)+
   geom_smooth(data = filter(ringing_data, Age==4, Sex%in%c(2)), aes(as.numeric(Month), BP), colour="black", size = 0.5)
-  
+print(plot1 + ggtitle("Malachite Sunbird"))  
+
 summary(glm(active_moult ~ BP, data = filter(ringing_data, Sex == 2), family = binomial))
 
 ### How to look at change by time? Maybe monthly by decade
@@ -79,8 +80,6 @@ ggplot(data = filter(ringing_data, !is.na(gender), !is.na(Decade)), aes(as.numer
 
 # Spatial
 
-class(ringing_data$pentad)
-
 # Functions to get the bits of pentad for mapping
 left = function(text, num_char) {substr(text, 1, num_char)}
 mid = function(text, start_num, num_char) {  substr(text, start_num, start_num + num_char - 1)}
@@ -96,13 +95,29 @@ ringing_data$Longitude <- as.numeric(mid(ringing_data$pentad, 6,2)) +  as.numeri
 # Course spatial split by Longitude
 ringing_data$West_East <- ifelse(ringing_data$Longitude<27, "West", "East")
 
+
 ggplot(ringing_data, aes(Longitude, Latitude, colour = West_East))+geom_point()
 
 
-GEW_758 <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
+# Trying GIS
+library(sf)
+library(ggspatial)
+
+Locations <- st_as_sf(ringing_data, coords = c("Longitude", "Latitude"), crs = 4326)
+
+class(Locations)
+
+names(Locations)
+
+ggplot() + 
+  annotation_map_tile(type = "osm", progress = "none", zoomin = -1) + 
+  geom_sf(data=Locations, aes(colour = West_East))
+
+## Plotting moult, female and male, east to west
+GEW_751 <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
        aes(as.numeric(Month), active_moult, colour=West_East))+  
   geom_smooth() +xlab("Month") + ylab("Active Moult") +theme_bw(base_size = 14)+facet_wrap(.~gender)
-print(GEW_758 + ggtitle("Greater Double Collared Sunbird"))
+print(GEW_751 + ggtitle("Malachite Sunbird"))
 
 # Here I reproduce January as an additional month to extend the curve over the summer period
 
@@ -163,4 +178,4 @@ A_Sunbird <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East
   geom_col(data = temp, aes(Month, n, alpha = 0.25), show.legend = F)+
 geom_smooth() +xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
 
-print(A_Sunbird + ggtitle("Amethyst Sunbird"))  
+print(A_Sunbird + ggtitle("Malachite Sunbird"))  
