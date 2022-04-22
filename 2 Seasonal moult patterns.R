@@ -21,14 +21,25 @@ library(lmerTest) # stats package
   table(ringing_data$Brood_patch)  
   ringing_data$BP <-  as.numeric(ringing_data$Brood_patch) 
  table(ringing_data$BP)
+ 
+ temp$BP <-  as.numeric(temp$Brood_patch) 
+ table(temp$BP)
+ 
  #simplify
  ringing_data$BP <-  ifelse(ringing_data$BP >0 , 1, ringing_data$BP)
  ringing_data$BP <-  ifelse(ringing_data$BP <0 , 0, ringing_data$BP)
  
+temp$BP <-  ifelse(temp$BP >0 , 1, temp$BP)
+temp$BP <-  ifelse(temp$BP <0 , 0, temp$BP)
+ 
  ringing_data$BP <-  ifelse(ringing_data$Brood_patch %in% c("1.0", "2.0", "y", "BP", "Brood Patch") , 1, ringing_data$BP)
  ringing_data$BP <-  ifelse(ringing_data$Brood_patch %in% c("-1.0", "n", "N", "no") , 0, ringing_data$BP)
  
- table(ringing_data$BP) # not a ton of data
+ temp$BP <-  ifelse(temp$Brood_patch %in% c("1.0", "2.0", "y", "BP", "Brood Patch") , 1, temp$BP)
+ temp$BP <-  ifelse(temp$Brood_patch %in% c("-1.0", "n", "N", "no") , 0, temp$BP)
+ 
+ table(ringing_data$BP)
+ table(temp$BP) # not a ton of data
  
  
 # Get the date info organized
@@ -40,6 +51,13 @@ ringing_data$Month <- as.numeric(ringing_data$Month)
 ringing_data$Year <- format(ringing_data$Startdate1, "%Y") 
 table(ringing_data$Year)
 
+temp$Startdate1 <- as.Date(temp$Startdate, "%Y-%m-%d")
+temp$Month <- format(temp$Startdate1, "%m") 
+str(temp$Month)
+temp$Month <- as.numeric(temp$Month)
+temp$Year <- format(temp$Startdate1, "%Y") 
+table(temp$Year)
+
 # figure out if active molt is occurring
 ringing_data$Moult <- as.numeric(ringing_data$Moult)
 ringing_data <- filter(ringing_data, !is.na(Moult))
@@ -48,6 +66,14 @@ ringing_data$gender <- ifelse(ringing_data$Sex==1, "Male", ifelse(ringing_data$S
 table(ringing_data$gender)
 ringing_data$active_moult <- ifelse(ringing_data$Moult>0&ringing_data$Moult<5555555555, 1, 0)
 table(ringing_data$active_moult)
+
+temp$Moult <- as.numeric(temp$Moult)
+temp <- filter(temp, !is.na(Moult))
+
+temp$gender <- ifelse(temp$Sex==1, "Male", ifelse(temp$Sex==2, "Female", NA))
+table(temp$gender)
+temp$active_moult <- ifelse(temp$Moult>0&temp$Moult<5555555555, 1, 0)
+table(temp$active_moult)
 #ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1,2)), aes(Month, active_moult))+geom_jitter()+facet_grid(.~Sex)
 
 # ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1,2)), aes(as.numeric(Month), active_moult))+  
@@ -62,9 +88,20 @@ plot1 <- ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1)), aes(as.numeric
   geom_smooth() +xlab("Month") + ylab("Active Moult")+theme_bw(base_size = 14)+
   geom_smooth(data = filter(ringing_data, Age==4, Sex%in%c(2)), aes(as.numeric(Month), active_moult), colour="pink", size = 2)+
   geom_smooth(data = filter(ringing_data, Age==4, Sex%in%c(2)), aes(as.numeric(Month), BP), colour="black", size = 0.5)
-print(plot1 + ggtitle("Malachite Sunbird"))  
+print(plot1 + ggtitle("Orange-breasted Sunbird"))  
 
 summary(glm(active_moult ~ BP, data = filter(ringing_data, Sex == 2), family = binomial))
+
+
+ggplot(data = filter(temp, Age==4, Sex%in%c(1,2)), aes(as.numeric(Month), active_moult))+  
+  geom_smooth()+
+  facet_grid(.~gender) +xlab("Month")
+
+plot1 <- ggplot(data = filter(temp, Age==4, Sex%in%c(1)), aes(as.numeric(Month), active_moult))+  
+  geom_smooth() +xlab("Month") + ylab("Active Moult")+theme_bw(base_size = 14)+
+  geom_smooth(data = filter(temp, Age==4, Sex%in%c(2)), aes(as.numeric(Month), active_moult), colour="pink", size = 2)+
+  geom_smooth(data = filter(temp, Age==4, Sex%in%c(2)), aes(as.numeric(Month), BP), colour="black", size = 0.5)
+print(plot1 + ggtitle("Orange-breasted Sunbird"))
 
 ### How to look at change by time? Maybe monthly by decade
 
@@ -78,6 +115,15 @@ ggplot(data = filter(ringing_data, !is.na(gender), !is.na(Decade)), aes(as.numer
   geom_smooth() +xlab("Month")+theme_bw(base_size = 14)+facet_wrap(.~gender)
 
 
+temp$Decade <- NA
+temp$Decade <- ifelse(temp$Year < 2000, "Pre 2000", temp$Decade)
+temp$Decade <- ifelse(temp$Year < 2010 & temp$Year > 2000, "2000 to 2009", temp$Decade)
+temp$Decade <- ifelse(temp$Year >2009, ">2010", temp$Decade)
+table(temp$Decade)
+
+ggplot(data = filter(temp, !is.na(gender), !is.na(Decade)), aes(as.numeric(Month), active_moult, colour=Decade))+  
+  geom_smooth() +xlab("Month")+theme_bw(base_size = 14)+facet_wrap(.~gender)
+
 # Spatial
 
 # Functions to get the bits of pentad for mapping
@@ -89,35 +135,44 @@ ringing_data$Lat <- as.numeric(left(ringing_data$pentad, 2)) +  as.numeric(mid(r
 ringing_data$Latitude <- ifelse(mid(ringing_data$pentad,5,1)=="_", ringing_data$Lat*-1, ringing_data$Lat)
 ringing_data$Longitude <- as.numeric(mid(ringing_data$pentad, 6,2)) +  as.numeric(mid(ringing_data$pentad, 8, 2))/60
 
+temp$Lat <- as.numeric(left(temp$pentad, 2)) +  as.numeric(mid(temp$pentad, 3, 2))/60
+temp$Latitude <- ifelse(mid(temp$pentad,5,1)=="_", temp$Lat*-1, temp$Lat)
+temp$Longitude <- as.numeric(mid(temp$pentad, 6,2)) +  as.numeric(mid(temp$pentad, 8, 2))/60
 # quick plot of where the data comes from
 
 
 # Course spatial split by Longitude
 ringing_data$West_East <- ifelse(ringing_data$Longitude<27, "West", "East")
 
+temp$West_East <- ifelse(temp$Longitude<27, "West", "East")
 
-ggplot(ringing_data, aes(Longitude, Latitude, colour = West_East))+geom_point()
+ggplot(temp, aes(Longitude, Latitude, colour = West_East))+geom_point()
 
 
 # Trying GIS
+
 library(sf)
 library(ggspatial)
 
 Locations <- st_as_sf(ringing_data, coords = c("Longitude", "Latitude"), crs = 4326)
 
+Locations1 <- st_as_sf(temp, coords = c("Longitude", "Latitude"), crs = 4326)
+
 class(Locations)
+class(Locations1)
 
 names(Locations)
+names(Locations1)
 
 ggplot() + 
   annotation_map_tile(type = "osm", progress = "none", zoomin = -1) + 
-  geom_sf(data=Locations, aes(colour = West_East))
+  geom_sf(data=Locations1, aes(colour = West_East))
 
 ## Plotting moult, female and male, east to west
-GEW_751 <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
+GEW_753 <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
        aes(as.numeric(Month), active_moult, colour=West_East))+  
   geom_smooth() +xlab("Month") + ylab("Active Moult") +theme_bw(base_size = 14)+facet_wrap(.~gender)
-print(GEW_751 + ggtitle("Malachite Sunbird"))
+print(GEW_753 + ggtitle("Orange-breasted Sunbird"))
 
 # Here I reproduce January as an additional month to extend the curve over the summer period
 
@@ -178,4 +233,4 @@ A_Sunbird <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East
   geom_col(data = temp, aes(Month, n, alpha = 0.25), show.legend = F)+
 geom_smooth() +xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
 
-print(A_Sunbird + ggtitle("Malachite Sunbird"))  
+print(A_Sunbird + ggtitle("Orange-breasted Sunbird"))  

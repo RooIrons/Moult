@@ -25,7 +25,7 @@ checkCulmen=NA; checkHead=NA; checkmass=NA; checkTail=NA; checkTarsus=NA; checkW
 
 # j <-  2 # Get the first species number in the filtered list of preferred species. 
 SPP <- adu_names$number[j]
-SPP <- 751
+SPP <- 758
 # Get the data
 ringing_data <- 
   read.csv(paste('https://api.birdmap.africa/safring/species/records_list/',SPP,'?format=csv',sep=""))
@@ -107,8 +107,8 @@ ringing_data <- filter(ringing_data, masscheck!='error', tarsuscheck!='error',he
 
 #### range check against SABAP2 data. Optional. This relies on there being SABAP2 records for SAFRING ringing locations.
 # 
-# sabap2url <- paste('https://api.birdmap.africa/sabap2/v2/cards/species/info/',SPP,'?format=csv',sep="")
-# sabap2data <- read.csv(sabap2url)
+sabap2url <- paste('https://api.birdmap.africa/sabap2/v2/cards/species/info/',SPP,'?format=csv',sep="")
+sabap2data <- read.csv(sabap2url)
 # 
-# Spp_pentads <- unique(sabap2data$Pentad)
-# temp <- filter(ringing_data, pentad%in%Spp_pentads)
+Spp_pentads <- unique(sabap2data$Pentad)
+temp <- filter(ringing_data, pentad%in%Spp_pentads)
