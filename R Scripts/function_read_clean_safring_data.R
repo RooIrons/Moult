@@ -5,7 +5,7 @@
 
 ## Get the SAFRING data
 
-safring_get_clean_data <- function(Spp_number=751, checkSABAP2=TRUE, filterAdults = TRUE, filterMoult = TRUE){
+safring_get_clean_data <- function(Spp_number=749, checkSABAP2=TRUE, filterAdults = TRUE, filterMoult = TRUE){
   library(tidyverse)
   SPP <- Spp_number
   # Get the data
@@ -29,21 +29,12 @@ safring_get_clean_data <- function(Spp_number=751, checkSABAP2=TRUE, filterAdult
   ringing_data$Culmen[ringing_data$Culmen==0] <- NA
   ringing_data$Tarsus[ringing_data$Tarsus==0] <- NA
   ringing_data$Tail[ringing_data$Tail==0] <- NA
-  # this is for BP (leave for now)
-  # ringing_data[ringing_data=="-"] <- NA
-  
-  # reduce the file to exclude birds with no key metric data? 
-  # Yes: otherwise more pentads to check down the line and it all takes too long...
-  # No = not all IDs will be checked (How nb is this?)
-  # ringing_data <-
-  #   filter(ringing_data, !is.na(Mass)|!is.na(Wing)|!is.na(Tarsus)|!is.na(Culmen)|!is.na(Tail)|!is.na(Head))
-  
-  
+
   # Here we deal with the very obvious measurement errors
   # We remove those measures outside the 99%quantile - this should be conservative i.e. should keep most records except extreme errors
   # as the original quantile definition will include the error outliers
   
-  # first create a reference set with spp# # also include the pentad check filter here:
+  # first create a reference set with spp# 
   
   checkmass <- ringing_data%>%filter(!is.na(Mass))%>%do(data.frame(lc=quantile(.$Mass, c(.05)), uq=quantile(.$Mass, c(.995)), n=length(.$Mass) ))
   checkWing <- ringing_data%>%filter(!is.na(Wing))%>%do(data.frame(lcwing=quantile(.$Wing, c(.005)), uqwing=quantile(.$Wing, c(.995)), n=length(.$Wing)))
@@ -98,7 +89,8 @@ safring_get_clean_data <- function(Spp_number=751, checkSABAP2=TRUE, filterAdult
   if(filterAdults == TRUE){
     ringing_data <- filter(ringing_data, Age>3)
   }
-  ###### Some preprocessing #######
+
+    ###### Some preprocessing #######
   
   ringing_data$Age <- as.numeric(ringing_data$Age)
   ringing_data$BP <-  as.numeric(ringing_data$Brood_patch) 
@@ -109,17 +101,19 @@ safring_get_clean_data <- function(Spp_number=751, checkSABAP2=TRUE, filterAdult
   ringing_data$BP <-  ifelse(ringing_data$Brood_patch %in% c("-1.0", "n", "N", "no") , 0, ringing_data$BP)
   
   # process Dates
-  ringing_data$Startdate1 <- as.Date(ringing_data$Startdate, "%Y-%m-%d")
-  ringing_data$Month <- format(ringing_data$Startdate1, "%m") 
+  ringing_data$Startdate <- as.Date(ringing_data$Startdate, "%Y-%m-%d")
+  ringing_data$Month <- format(ringing_data$Startdate, "%m") 
   ringing_data$Month <- as.numeric(ringing_data$Month)
-  ringing_data$Year <- format(ringing_data$Startdate1, "%Y") 
+  ringing_data$Year <- format(ringing_data$Startdate, "%Y") 
+  library(lubridate)
+  ringing_data$Day <- yday(ringing_data$Startdate)
   
-  # Moult_Month will offset months to focus over summer
+  # Moult_Month will offset months to focus over summer for visual display grouped by month
   
   ringing_data$Moult_Month <- ifelse(ringing_data$Month<6, ringing_data$Month + 12, ringing_data$Month)
 
   # Do the active moult thing
-  # figure out if active molt is occurring. Type 1 data.
+  # figure out if active molt is occurring. Type 1 data?
   ringing_data$Moult <- as.numeric(ringing_data$Moult)
   
   if(filterMoult == TRUE){
@@ -127,7 +121,6 @@ safring_get_clean_data <- function(Spp_number=751, checkSABAP2=TRUE, filterAdult
   }
   ringing_data$gender <- ifelse(ringing_data$Sex==1, "Male", ifelse(ringing_data$Sex==2, "Female", NA))
   ringing_data$active_moult <- ifelse(ringing_data$Moult>0&ringing_data$Moult<5555555555, 1, 0)
-
 
   # Functions to get the bits of pentad for mapping
   left = function(text, num_char) {substr(text, 1, num_char)}
