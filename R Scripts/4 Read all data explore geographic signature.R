@@ -40,11 +40,18 @@ nectarivores <- left_join(nectarivores, select(adu_names, Spp = number, Name = E
 
 count(nectarivores, Name)
 
+Locations <- st_as_sf(nectarivores, coords = c("Longitude", "Latitude"), crs = 4326)
+class(Locations)
+names(Locations)
+
 ggplot(nectarivores, aes(Longitude, Latitude, colour = Geo_Quad_Score))+geom_point()
 
 
 ggplot(nectarivores, aes(Longitude, Latitude, colour = Name))+geom_jitter(size = 0.5)
 
+ggplot() + 
+  annotation_map_tile(type = "osm", progress = "none", zoomin = 0) + 
+  geom_sf(data=Locations, aes(colour = Name))
 
 # illustrate broad patterns by species
 ggplot(nectarivores, aes(Moult_Month, active_moult))+geom_smooth()+facet_wrap(~Name)
@@ -56,7 +63,16 @@ library(mgcv)
 nectarivores <-   filter(nectarivores, !is.na(gender)) 
 
 # Example species CSB
-CSB <- subset(nectarivores, nectarivores$Spp == 749)
+CSB <- subset(nectarivores, nectarivores$Spp == 772) #Amethyst
+CSB <- subset(nectarivores, nectarivores$Spp == 749) #Cape sugarbird
+CSB <- subset(nectarivores, nectarivores$Spp == 758) #GDC sunbird
+CSB <- subset(nectarivores, nectarivores$Spp == 750) #Gurney's Sugarbird
+CSB <- subset(nectarivores, nectarivores$Spp == 751) #Malachite Sunbird
+CSB <- subset(nectarivores, nectarivores$Spp == 753) #Orange-breasted Sunbird
+CSB <- subset(nectarivores, nectarivores$Spp == 774) #Scarlet-chested Sunbird
+CSB <- subset(nectarivores, nectarivores$Spp == 760) #Southern Double-collared Sunbird
+CSB <- subset(nectarivores, nectarivores$Spp == 763) #White-bellied (breasted) Sunbird
+
 # fit a smooth term for day of year
 summary(gam(active_moult ~ Month,data = CSB, family = binomial))
 
@@ -70,7 +86,6 @@ filter(CSB, gender=="Female", csb_prediction==my_max_min$Max[1]) %>% select(Mont
 filter(CSB, gender=="Female", csb_prediction==my_max_min$Min[1]) %>% select(Month) %>% distinct
 filter(CSB, gender=="Male", csb_prediction==my_max_min$Max[2]) %>% select(Month) %>% distinct
 filter(CSB, gender=="Male", csb_prediction==my_max_min$Min[2]) %>% select(Month) %>% distinct
-
 
 
 

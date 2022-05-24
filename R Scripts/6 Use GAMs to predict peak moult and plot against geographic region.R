@@ -16,9 +16,25 @@ nectarivores$Geo_Name <- ifelse(nectarivores$Spp == 758 & nectarivores$West_East
 
 table(nectarivores$Geo_Name)
 
+names(nectarivores)
+nectarivores$Spp
+
+summary(nectarivores)
+
 # Example species CSB
+CSB <- filter(nectarivores, Geo_Name == "Amethyst (Black) Sunbird")
 CSB <- filter(nectarivores, Geo_Name == "Cape Sugarbird")
+CSB <- filter(nectarivores, Geo_Name == "Greater Double-collared Sunbird")
+CSB <- filter(nectarivores, Geo_Name == "Gurney's Sugarbird")
 CSB <- filter(nectarivores, Geo_Name == "Malachite Sunbird")
+CSB <- filter(nectarivores, Geo_Name == "Orange-breasted Sunbird")
+CSB <- filter(nectarivores, Geo_Name == "Scarlet-chested Sunbird")
+CSB <- filter(nectarivores, Geo_Name == "Southern Double-collared Sunbird")
+# CSB <- filter(nectarivores, Geo_Name == "Western GDCS")
+# CSB <- filter(nectarivores, Geo_Name == "Western MSB")
+# CSB <- filter(nectarivores, Geo_Name == "Western SDCS")
+CSB <- filter(nectarivores, Geo_Name == "White-bellied (breasted) Sunbird")
+
 # fit a smooth term for day of year
 library(mgcv)
 
