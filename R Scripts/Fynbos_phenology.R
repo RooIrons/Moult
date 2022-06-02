@@ -1,6 +1,6 @@
 library(tidyverse); library(readxl)
 
-flowers <- read_excel("Geerts_flower.totals2.meta.xlsx")
+flowers <- read_excel("flower.totals2.meta.xlsx")
 
 ggplot(flowers, aes(londd, latdd))+geom_point()
 flowers$WestEast <- ifelse(flowers$londd<27 , "West", "East")

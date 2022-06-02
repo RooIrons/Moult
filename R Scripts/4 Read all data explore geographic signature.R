@@ -49,9 +49,10 @@ ggplot(nectarivores, aes(Longitude, Latitude, colour = Geo_Quad_Score))+geom_poi
 
 ggplot(nectarivores, aes(Longitude, Latitude, colour = Name))+geom_jitter(size = 0.5)
 
+windows()
 ggplot() + 
   annotation_map_tile(type = "osm", progress = "none", zoomin = 0) + 
-  geom_sf(data=Locations, aes(colour = Name))
+  geom_sf(data=Locations, aes(colour = Name))+geom_jitter(size = 0.25)
 
 # illustrate broad patterns by species
 ggplot(nectarivores, aes(Moult_Month, active_moult))+geom_smooth()+facet_wrap(~Name)
@@ -87,27 +88,22 @@ filter(CSB, gender=="Female", csb_prediction==my_max_min$Min[1]) %>% select(Mont
 filter(CSB, gender=="Male", csb_prediction==my_max_min$Max[2]) %>% select(Month) %>% distinct
 filter(CSB, gender=="Male", csb_prediction==my_max_min$Min[2]) %>% select(Month) %>% distinct
 
-
-
-
-
-
-summary(gam(active_moult ~ s(day)+West_East,data = CSB, family = binomial))
-summary(gam(active_moult ~ s(day)+West_East,data = CSB, family = binomial))
+summary(gam(active_moult ~ s(Day)+West_East,data = CSB, family = binomial))
+summary(gam(active_moult ~ s(Day)+West_East,data = CSB, family = binomial))
 
 MSB <- subset(nectarivores, nectarivores$Spp == 751)
 
 # model summary,
 ## cc makes start and end points equivalent, for cyclical data
-summary(gam(active_moult ~ s(day,by = factor(West_East), bs = "cc"),data = MSB, family = binomial))
+summary(gam(active_moult ~ s(Day,by = factor(West_East), bs = "cc"),data = MSB, family = binomial))
 
 # This is the prediction...
-MSB$msb_output <- predict(gam(active_moult ~ s(day, by = factor(West_East), bs="cc"),data = MSB, family = binomial), data = MSB)
-ggplot(MSB, aes(day, msb_output, colour=West_East))+geom_point()
+MSB$msb_output <- predict(gam(active_moult ~ s(Day, by = factor(West_East), bs="cc"),data = MSB, family = binomial), data = MSB)
+ggplot(MSB, aes(Day, msb_output, colour=West_East))+geom_point()
 
-ggplot(MSB, aes(day, active_moult, colour=West_East))+geom_smooth()
+ggplot(MSB, aes(Day, active_moult, colour=West_East))+geom_smooth()
 ggplot(MSB, aes(Moult_Month, active_moult, colour=West_East))+geom_smooth()
-ggplot(MSB, aes(day, active_moult, colour=West_East))+geom_smooth()
+ggplot(MSB, aes(Day, active_moult, colour=West_East))+geom_smooth()
 
 # Reduce degrees of freedoms to get 'smoother' curves
 
