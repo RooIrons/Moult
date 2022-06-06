@@ -21,7 +21,7 @@ source(
 )
 
 # Get some data, include non adults:
-## Greater-Double Collared Sunbird 
+##** Greater-Double Collared Sunbird **##
 gdcs <- safring_get_clean_data(Spp_number = 758, checkSABAP2 = F, filterAdults = F) 
 
 table(gdcs$Age)
@@ -43,7 +43,7 @@ ggplot(gdcs, aes(Moult_Month, active_moult))+geom_smooth()+
 
 
 # Get some data:
-## Cape Sugarbird
+##** Cape Sugarbird **##
 csb <- safring_get_clean_data(Spp_number = 749, checkSABAP2 = F, filterAdults = F) 
 
 table(csb$Age)
@@ -70,7 +70,7 @@ ggplot(data = filter(csb, Sex == 2), aes(Month, active_moult))+geom_smooth()+
 
 
 # Get some data, include non adults:
-## Orange-breasted Sunbird
+##** Orange-breasted Sunbird **##
 obs <- safring_get_clean_data(Spp_number = 753, checkSABAP2 = F, filterAdults = F) 
 
 table(obs$Age)
@@ -95,7 +95,7 @@ ggplot(obs, aes(Month, active_moult))+geom_smooth()+
   geom_smooth(data = filter(obs, Sex == 2), aes(Month, BP), se = F, colour = "black", size = 1)+ggtitle("obs")
 
 # Get some data, include non adults:
-## Amethyst Sunbird
+##** Amethyst Sunbird **##
 as <- safring_get_clean_data(Spp_number = 772, checkSABAP2 = F, filterAdults = F) 
 
 table(as$Age)
@@ -120,7 +120,7 @@ ggplot(as, aes(Month, active_moult))+geom_smooth()+
   geom_smooth(data = filter(as, Sex == 2), aes(Month, BP), se = F, colour = "black", size = 1)+ggtitle("Amethyst Sunbird Phenology")
 
 # Get some data, include non adults:
-## Gurney's Sunbird
+##** Gurney's Sunbird **##
 gs <- safring_get_clean_data(Spp_number = 750, checkSABAP2 = F, filterAdults = F) 
 
 table(gs$Age)
@@ -145,7 +145,7 @@ ggplot(gs, aes(Month, active_moult))+geom_smooth()+
   geom_smooth(data = filter(gs, Sex == 2), aes(Month, BP), se = F, colour = "black", size = 1)+ggtitle("Gurney's Sunbird Phenology")
 
 # Get some data, include non adults:
-## Malachite Sunbird
+##** Malachite Sunbird **##
 ms <- safring_get_clean_data(Spp_number = 751, checkSABAP2 = F, filterAdults = F) 
 
 table(ms$Age)
@@ -170,7 +170,7 @@ ggplot(ms, aes(Month, active_moult))+geom_smooth()+
   geom_smooth(data = filter(ms, Sex == 2), aes(Month, BP), se = F, colour = "black", size = 1)+ggtitle("Malachite Sunbird Phenology")
 
 # Get some data, include non adults:
-## Scarlet-Chested Sunbird
+##** Scarlet-Chested Sunbird **##
 scs <- safring_get_clean_data(Spp_number = 774, checkSABAP2 = F, filterAdults = F) 
 
 table(scs$Age)
@@ -195,7 +195,7 @@ ggplot(scs, aes(Month, active_moult))+geom_smooth()+
   geom_smooth(data = filter(scs, Sex == 2), aes(Month, BP), se = F, colour = "black", size = 1)+ggtitle("Scarlet-chested Sunbird Phenology")
 
 # Get some data, include non adults:
-## Southern Double-Collared Sunbird
+##** Southern Double-Collared Sunbird *##
 sdcs <- safring_get_clean_data(Spp_number = 760, checkSABAP2 = F, filterAdults = F) 
 
 table(sdcs$Age)
@@ -220,7 +220,7 @@ ggplot(sdcs, aes(Month, active_moult))+geom_smooth()+
   geom_smooth(data = filter(sdcs, Sex == 2), aes(Month, BP), se = F, colour = "black", size = 1)+ggtitle("Southern Double-collared Sunbird Phenology")
 
 # Get some data, include non adults:
-## White-bellied Sunbird
+##** White-bellied Sunbird **##
 wbs <- safring_get_clean_data(Spp_number = 763, checkSABAP2 = F, filterAdults = F) 
 
 table(wbs$Age)
