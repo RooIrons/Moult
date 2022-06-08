@@ -1,3 +1,5 @@
+rm(list = ls())
+
 library(tidyverse); library(readxl)
 
 flowers <- read_excel("flower.totals2.meta.xlsx")
@@ -8,7 +10,10 @@ flowers$WestEast <- ifelse(flowers$latdd> -30 , "East", flowers$WestEast)
 
 ggplot(flowers, aes(londd, latdd, colour = WestEast))+geom_point()
 
-df <- select(rf, jan:dec)
+df <- select(flowers, jan:dec)
+
+##??
+df1 <- select(rf, jan:dec)
 
 flowers$Means <- rowMeans(df)
 flowers$Sums <- rowSums(df)
