@@ -88,7 +88,7 @@ plot1 <- ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1)), aes(as.numeric
   geom_smooth() +xlab("Month") + ylab("Active Moult")+theme_bw(base_size = 14)+
   geom_smooth(data = filter(ringing_data, Age==4, Sex%in%c(2)), aes(as.numeric(Month), active_moult), colour="pink", size = 2)+
   geom_smooth(data = filter(ringing_data, Age==4, Sex%in%c(2)), aes(as.numeric(Month), BP), colour="black", size = 0.5)
-print(plot1 + ggtitle("Orange-breasted Sunbird"))  
+print(plot1 + ggtitle("GDCS"))  
 
 summary(glm(active_moult ~ BP, data = filter(ringing_data, Sex == 2), family = binomial))
 
@@ -101,7 +101,7 @@ plot1 <- ggplot(data = filter(temp, Age==4, Sex%in%c(1)), aes(as.numeric(Month),
   geom_smooth() +xlab("Month") + ylab("Active Moult")+theme_bw(base_size = 14)+
   geom_smooth(data = filter(temp, Age==4, Sex%in%c(2)), aes(as.numeric(Month), active_moult), colour="pink", size = 2)+
   geom_smooth(data = filter(temp, Age==4, Sex%in%c(2)), aes(as.numeric(Month), BP), colour="black", size = 0.5)
-print(plot1 + ggtitle("Orange-breasted Sunbird"))
+print(plot1 + ggtitle("GDCS"))
 
 ### How to look at change by time? Maybe monthly by decade
 
@@ -169,10 +169,10 @@ ggplot() +
   geom_sf(data=Locations1, aes(colour = West_East))
 
 ## Plotting moult, female and male, east to west
-GEW_753 <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
+GEW_758 <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
        aes(as.numeric(Month), active_moult, colour=West_East))+  
   geom_smooth() +xlab("Month") + ylab("Active Moult") +theme_bw(base_size = 14)+facet_wrap(.~gender)
-print(GEW_753 + ggtitle("Orange-breasted Sunbird"))
+print(GEW_758 + ggtitle("GDCS"))
 
 # Here I reproduce January as an additional month to extend the curve over the summer period
 
@@ -233,4 +233,4 @@ A_Sunbird <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East
   geom_col(data = temp, aes(Month, n, alpha = 0.25), show.legend = F)+
 geom_smooth() +xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
 
-print(A_Sunbird + ggtitle("Orange-breasted Sunbird"))  
+print(A_Sunbird + ggtitle("GDCS"))  

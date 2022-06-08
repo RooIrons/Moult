@@ -8,6 +8,7 @@
 
 # Clean the environment
 rm(list = ls())
+setwd("C:/Users/Rebecca Irons/Desktop/Thesis/Moult Code/Moult/R Scripts")
 
 # Libraries
 library(tidyverse)
@@ -40,19 +41,32 @@ nectarivores <- left_join(nectarivores, select(adu_names, Spp = number, Name = E
 
 count(nectarivores, Name)
 
+#Name    n
+#1         Amethyst (Black) Sunbird 3716
+#2                   Cape Sugarbird 4513
+#3  Greater Double-collared Sunbird 1981
+#4               Gurney's Sugarbird  260
+#5                Malachite Sunbird 1960
+#6          Orange-breasted Sunbird 1959
+#7          Scarlet-chested Sunbird  451
+#8 Southern Double-collared Sunbird 4962
+#9 White-bellied (breasted) Sunbird 1853
+
+library(sf)
+library(ggspatial)
+
 Locations <- st_as_sf(nectarivores, coords = c("Longitude", "Latitude"), crs = 4326)
 class(Locations)
 names(Locations)
 
+windows()
 ggplot(nectarivores, aes(Longitude, Latitude, colour = Geo_Quad_Score))+geom_point()
-
 
 ggplot(nectarivores, aes(Longitude, Latitude, colour = Name))+geom_jitter(size = 0.5)
 
-windows()
 ggplot() + 
   annotation_map_tile(type = "osm", progress = "none", zoomin = 0) + 
-  geom_sf(data=Locations, aes(colour = Name))+geom_jitter(size = 0.25)
+  geom_sf(data=Locations, aes(colour = Name))+geom_jitter()
 
 # illustrate broad patterns by species
 ggplot(nectarivores, aes(Moult_Month, active_moult))+geom_smooth()+facet_wrap(~Name)

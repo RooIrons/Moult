@@ -5,6 +5,7 @@
 # Author: Alan Lee
 # File initially created April 2022 based on code to clean data for the ringing/climate change manuscript
 rm(list = ls())
+setwd("C:/Users/Rebecca Irons/Desktop/Thesis/Moult Code/Moult/R Scripts")
 require(dplyr); require(ggplot2); library(broom) # packages for data manipulation
 # library(RCurl); library(rjson) # packages to read SABAP/SAFRING data via api calls
 
@@ -14,7 +15,7 @@ require(dplyr); require(ggplot2); library(broom) # packages for data manipulatio
  adu_names <- adu_names[, 1:3]
 # 
 # # TEST SUBSET. 
- adu_names <- filter(adu_names, number%in%c(758, 760, 772, 749, 751, 753)) # a bunch of sunbirds
+ adu_names <- filter(adu_names, number%in%c(758, 760, 772, 749, 751, 753, 774,750,763)) # a bunch of sunbirds
 
 adu_names
  ## initiate the dataframes to store variables (summary metrics and error file)
