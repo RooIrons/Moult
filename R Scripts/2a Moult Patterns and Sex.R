@@ -1,6 +1,9 @@
+
 ## Do Moult Patterns differ significantly between female and males 
 ## of our nectarivore species?
 
+##** Preparation for the code **##
+##*
 # Clean the environment
 rm(list = ls())
 setwd("C:/Users/Rebecca Irons/Desktop/Thesis/Moult Code/Moult/R Scripts")
@@ -8,6 +11,7 @@ setwd("C:/Users/Rebecca Irons/Desktop/Thesis/Moult Code/Moult/R Scripts")
 # Load the required packages
 require(dplyr); require(ggplot2); library(broom) # packages for data manipulation
 library(RCurl); library(rjson) # packages to read SABAP/SAFRING data via api calls
+
 
 ##** Reading in the Data for chosen species: **##
 ##*
@@ -29,6 +33,7 @@ SPP <- 758
 # Get the data
 ringing_data <- 
   read.csv(paste('https://api.birdmap.africa/safring/species/records_list/',SPP,'?format=csv',sep=""))
+
 
 ##** Tidy data: **##
 ##*
@@ -116,9 +121,7 @@ ringing_data$BP <-  ifelse(ringing_data$Brood_patch %in% c("-1.0", "n", "N", "no
 table(ringing_data$BP)
 # not a ton of data
 
-
 # Get the date info organized
-
 ringing_data$Startdate1 <- as.Date(ringing_data$Startdate, "%Y-%m-%d")
 ringing_data$Month <- format(ringing_data$Startdate1, "%m") 
 str(ringing_data$Month)
@@ -148,7 +151,6 @@ ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1,2)), aes(as.numeric(Month)
   facet_grid(.~gender) +xlab("Month")
 
 # Spatial
-
 # Functions to get the bits of pentad for mapping
 left = function(text, num_char) {substr(text, 1, num_char)}
 mid = function(text, start_num, num_char) {  substr(text, start_num, start_num + num_char - 1)}
@@ -158,19 +160,16 @@ ringing_data$Lat <- as.numeric(left(ringing_data$pentad, 2)) +  as.numeric(mid(r
 ringing_data$Latitude <- ifelse(mid(ringing_data$pentad,5,1)=="_", ringing_data$Lat*-1, ringing_data$Lat)
 ringing_data$Longitude <- as.numeric(mid(ringing_data$pentad, 6,2)) +  as.numeric(mid(ringing_data$pentad, 8, 2))/60
 
-# quick plot of where the data comes from
-
 # Course spatial split by Longitude
 ringing_data$West_East <- ifelse(ringing_data$Longitude<27, "West", "East")
 
 ## Plotting moult, female and male, east to west
-GEW_758 <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
+Plot <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
                   aes(as.numeric(Month), active_moult, colour=West_East))+  
   geom_smooth() +xlab("Month") + ylab("Active Moult") +theme_bw(base_size = 14)+facet_wrap(.~gender)
-print(GEW_758 + ggtitle("GDCS"))
+print(Plot + ggtitle("GDCS"))
 
-# Here I reproduce January as an additional month to extend the curve over the summer period
-
+# Reproduce January as an additional month to extend the curve over the summer period
 temp <- filter(ringing_data, as.numeric(Month) == 1)
 temp$Month <- 13
 
@@ -178,6 +177,7 @@ ringing_data2 <- bind_rows(ringing_data, temp)
 
 Title <- filter(adu_names, number == SPP) %>% select(English) %>% as.character(.)
 
+## FINAL PLOT
 ggplot(data = filter(ringing_data2, !is.na(gender), !is.na(West_East)), 
        aes(as.numeric(Month), active_moult, colour=West_East))+  
   geom_smooth() +xlab("Month")+theme_bw(base_size = 14)+facet_wrap(.~gender)+
