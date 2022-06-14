@@ -90,7 +90,7 @@ ggplot(obs, aes(Moult_Month, active_moult))+geom_smooth()+
   geom_col(data = obs, aes(Moult_Month, 1, fill = Age_class),position = "fill", alpha = 0.5)+
   geom_smooth(data = filter(obs, Sex == 2), aes(Moult_Month, BP), se = F)+ggtitle("obs")
 
-ggplot(obs, aes(Month, active_moult))+geom_smooth()+
+ggplot(obs, aes(Month, active_moult))+geom_smooth()+coord_cartesian(ylim = c(0,1))+
   geom_col(data = obs, aes(Month, 1, fill = Age_class),position = "fill", alpha = 0.5)+
   geom_smooth(data = filter(obs, Sex == 2), aes(Month, BP), se = F, colour = "black", size = 1)+ggtitle("obs")
 

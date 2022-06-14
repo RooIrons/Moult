@@ -15,7 +15,7 @@ require(dplyr); require(ggplot2); library(broom) # packages for data manipulatio
  adu_names <- adu_names[, 1:3]
 # 
 # # TEST SUBSET. 
- adu_names <- filter(adu_names, number%in%c(758, 760, 772, 749, 751, 753, 774,750,763)) # a bunch of sunbirds
+ adu_names <- filter(adu_names, number%in%c(758, 760, 772, 749, 751, 753, 774,750,763, 869, 855)) # a bunch of sunbirds
 
 adu_names
  ## initiate the dataframes to store variables (summary metrics and error file)
@@ -26,7 +26,7 @@ checkCulmen=NA; checkHead=NA; checkmass=NA; checkTail=NA; checkTarsus=NA; checkW
 
 # j <-  2 # Get the first species number in the filtered list of preferred species. 
 SPP <- adu_names$number[j]
-SPP <- 758
+SPP <- 855
 # Get the data
 ringing_data <- 
   read.csv(paste('https://api.birdmap.africa/safring/species/records_list/',SPP,'?format=csv',sep=""))
