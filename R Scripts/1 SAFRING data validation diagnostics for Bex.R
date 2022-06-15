@@ -26,7 +26,7 @@ checkCulmen=NA; checkHead=NA; checkmass=NA; checkTail=NA; checkTarsus=NA; checkW
 
 # j <-  2 # Get the first species number in the filtered list of preferred species. 
 SPP <- adu_names$number[j]
-SPP <- 856
+SPP <- 749
 # Get the data
 ringing_data <- 
   read.csv(paste('https://api.birdmap.africa/safring/species/records_list/',SPP,'?format=csv',sep=""))

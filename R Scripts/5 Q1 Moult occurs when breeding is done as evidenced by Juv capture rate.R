@@ -63,11 +63,33 @@ ggplot(csb, aes(Moult_Month, active_moult))+geom_smooth()+
   geom_col(data = csb, aes(Moult_Month, 1, fill = Age_class),position = "fill", alpha = 0.5)+
   geom_smooth(data = filter(csb, Sex == 2), aes(Moult_Month, BP), se = F)+ggtitle("csb")
 
-
 ggplot(data = filter(csb, Sex == 2), aes(Month, active_moult))+geom_smooth()+
   geom_col(data = csb, aes(Month, 1, fill = Age_class),position = "fill", alpha = 0.5)+
   geom_smooth(data = filter(csb, Sex == 2), aes(Month, BP), se = F, colour = "black", size = 1)+ggtitle("Cape Sugarbird Phenology")
 
+#### TRYING
+
+csb %>% group_by(Month) %>% tally
+
+counts <- csb %>% group_by(Month) %>% tally
+counts$n <- counts$n / max(counts$n)
+counts
+
+A_Sunbird <- ggplot(data = filter(csb, !is.na(gender), !is.na(West_East)), 
+                    aes(as.numeric(Month), active_moult))+  
+  geom_col(data = counts, aes(Month, n, alpha = 0.25), show.legend = T)+
+  geom_smooth() +xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
+
+print(A_Sunbird + ggtitle("Cape Sugarbird"))  
+
+
+Ringing_Moult <- ggplot(data = filter(csb, !is.na(gender), !is.na(West_East)), 
+                    aes(as.numeric(Month), active_moult))+  
+  geom_col(data = counts, aes(Month, n, alpha = 0.25), show.legend = F)+
+  scale_y_continuous("Active Moult", sec.axis = sec_axis(~(.), name = "Ringing Counts")) +
+  scale_x_continuous("Month", breaks = 1:12) 
+
+print(Ringing_Moult+ ggtitle("Cape Sugarbird"))  
 
 # Get some data, include non adults:
 ##** Orange-breasted Sunbird **##
