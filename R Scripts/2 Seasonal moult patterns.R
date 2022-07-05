@@ -230,24 +230,12 @@ ringing_data %>% filter(!is.na(gender)) %>% group_by(gender, Month, active_moult
 
 A_Sunbird <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
        aes(as.numeric(Month), active_moult))+  
-  geom_col(data = temp, aes(Month, n, alpha = 0.25), show.legend = T)+
-geom_smooth() +xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
+  geom_col(data = temp, aes(Month, n, alpha = 0.25), show.legend = F) + geom_text(aes(label=n), vjust=-0.3, size=3.5)+
+  xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
 
 print(A_Sunbird + ggtitle("Cape Sugarbird"))  
 
-
-ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
-       aes(x = as.numeric(Month), y = active_moult))+ 
-  geom_col(data = temp, aes(x = Month, y = n), size = 1, color = "darkblue", fill = "white")+ 
- xlab("Month") + ylab("Ringing Count") + theme_bw(base_size = 14)
-  
-plot_moult_ringing <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
-                             aes(x = as.numeric(Month), y = active_moult)) +
-  geom_col(data = temp, aes(x = Month, y = n, alpha = 0.25), show.legend = F) + geom_smooth()
-
-  
-  +xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
-
-print(plot_moult_ringing + ggtitle("CS"))  
-
-rlang::last_error()                          
+ggplot(data=df, aes(x=dose, y=len)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  geom_text(aes(label=len), vjust=-0.3, size=3.5)+
+  theme_minimal()                       
