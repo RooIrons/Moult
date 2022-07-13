@@ -56,7 +56,8 @@ library(sf)
 citation("sf")
 library(ggspatial)
 citation("ggspatial")
-
+library(rosm)
+citation("rosm")
 Locations <- st_as_sf(nectarivores, coords = c("Longitude", "Latitude"), crs = 4326)
 class(Locations)
 names(Locations)
@@ -68,7 +69,7 @@ ggplot(nectarivores, aes(Longitude, Latitude, colour = Name))+geom_jitter(size =
 
 ggplot() + 
   annotation_map_tile(type = "osm", progress = "none", zoomin = 0) + 
-  geom_sf(data=Locations, aes(colour = Name))+geom_jitter()
+  geom_sf(data=Locations, aes(colour = Name))+geom_jitter(size = 0.5)
 
 # illustrate broad patterns by species
 ggplot(nectarivores, aes(Moult_Month, active_moult))+geom_smooth()+facet_wrap(~Name)
@@ -76,6 +77,7 @@ ggplot(nectarivores, aes(Moult_Month, active_moult))+geom_smooth()+facet_wrap(~N
 
 # We want to grab the month with the highest probability of moult
 library(mgcv)
+citation("mgcv")
 
 nectarivores <-   filter(nectarivores, !is.na(gender)) 
 
