@@ -13,7 +13,7 @@ rm(list = ls())
 # Libraries
 library(tidyverse)
 
-setwd("C:/Users/Rebecca Irons/Desktop/Thesis/Moult Code/Moult/R Scripts")
+setwd("C:/Users/bexir/OneDrive/Desktop/Academics/Thesis/Moult Code/Moult/R Scripts")
 
 # Read the read and clean data function
 source(
@@ -39,7 +39,7 @@ ggplot(gdcs, aes(Moult_Month, 1, fill = Age_class))+geom_col(position = "fill")
 
 ggplot(gdcs, aes(Moult_Month, active_moult))+geom_smooth()+
   geom_col(data = gdcs, aes(Moult_Month, 1, fill = Age_class),position = "fill", alpha = 0.5)+
-  geom_smooth(data = filter(gdcs, Sex == 2), aes(Moult_Month, BP), se = F)+ggtitle("GDCS")
+  geom_smooth(data = filter(gdcs, Sex == 2), aes(Moult_Month, BP), colour = "black", se = F)+ggtitle("GDCS")
 
 
 # Get some data:

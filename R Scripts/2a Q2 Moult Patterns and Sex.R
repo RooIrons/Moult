@@ -6,7 +6,7 @@
 ##*
 # Clean the environment
 rm(list = ls())
-setwd("C:/Users/Rebecca Irons/Desktop/Thesis/Moult Code/Moult/R Scripts")
+setwd("C:/Users/bexir/OneDrive/Desktop/Academics/Thesis/Moult Code/Moult/R Scripts")
 
 # Load the required packages
 require(dplyr); require(ggplot2); library(broom) # packages for data manipulation
@@ -148,7 +148,9 @@ table(ringing_data$active_moult)
 
 ggplot(data = filter(ringing_data, Age==4, Sex%in%c(1,2)), aes(as.numeric(Month), active_moult))+  
   geom_smooth()+
-  facet_grid(.~gender) +xlab("Month")
+  facet_grid(.~gender) +xlab("Month") + ylab("Active Moult")
+
+citation("tidyverse")
 
 # Spatial
 # Functions to get the bits of pentad for mapping
@@ -163,7 +165,7 @@ ringing_data$Longitude <- as.numeric(mid(ringing_data$pentad, 6,2)) +  as.numeri
 # Course spatial split by Longitude
 ringing_data$West_East <- ifelse(ringing_data$Longitude<27, "West", "East")
 
-## Plotting moult, female and male, east to west
+## Plotting moult, female and male, east to west (QUESTION)
 Plot <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
                   aes(as.numeric(Month), active_moult, colour=West_East))+  
   geom_smooth() +xlab("Month") + ylab("Active Moult") +theme_bw(base_size = 14)+facet_wrap(.~gender)
@@ -180,12 +182,14 @@ Title <- filter(adu_names, number == SPP) %>% select(English) %>% as.character(.
 ## FINAL PLOT
 ggplot(data = filter(ringing_data2, !is.na(gender), !is.na(West_East)), 
        aes(as.numeric(Month), active_moult, colour=West_East))+  
-  geom_smooth() +xlab("Month")+theme_bw(base_size = 14)+facet_wrap(.~gender)+
+  geom_smooth() +xlab("Month") + ylab("Active Moult")+theme_bw(base_size = 14)+facet_wrap(.~gender)+
   coord_cartesian(xlim = c(0, 13), ylim=c(0, 1))+
   ggtitle(Title)
 
 
 
+### Use this to show that ringing doesn't correlate with moult peaks. The peaks in moult are different to 
+### peaks in ringing effort??
 
 ##** With Stacked Chart: **##
 ##*
@@ -193,8 +197,10 @@ ggplot(data = filter(ringing_data2, !is.na(gender), !is.na(West_East)),
 
 ringing_data2 %>% group_by(Month) %>% tally
 
+
 temp <- ringing_data2 %>% group_by(Month) %>% tally
-temp$n <- temp$n / max(temp$n)
+temp$n
+temp$n_prop <- temp$n / max(temp$n)
 temp
 
 ringing_data2 %>% filter(!is.na(gender)) %>% group_by(Month) %>% tally
@@ -219,8 +225,27 @@ ringing_data %>% filter(!is.na(gender)) %>% group_by(gender, Month, active_moult
 
 A_Sunbird <- ggplot(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
                     aes(as.numeric(Month), active_moult))+  
-  geom_col(data = temp, aes(Month, n, alpha = 0.25), show.legend = F)+
+  geom_col(data = temp, aes(Month, n_prop, alpha = 0.25), show.legend = F)+ 
   geom_smooth() +xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
 
-print(A_Sunbird + ggtitle("GDCS"))  
+print(A_Sunbird + ggtitle("GDCS"))
 
+### FINAL PLOTs: 
+# Plot of active moult with month and the ringing counts recorded for each month for both sexes. 
+Moult_Month_Ringing <- ggplot(temp, aes(x = Month, y = n_prop)) +
+  geom_col(fill = "slate gray") +
+  geom_text(aes(label = n), vjust = 1.6, colour = "white") +
+  geom_smooth(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
+              aes(as.numeric(Month), active_moult)) + xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)
+print(Moult_Month_Ringing + ggtitle("GDCS"))
+
+
+### Ringing counts included for each sex: 
+Moult_Month_Ringing <- ggplot(temp, aes(x = Month, y = n_prop)) +
+  geom_col(fill = "slate gray") +
+  geom_text(aes(label = n), vjust = 1.6, colour = "white") +
+  geom_smooth(data = filter(ringing_data, !is.na(gender), !is.na(West_East)), 
+              aes(as.numeric(Month), active_moult)) + xlab("Month")+ ylab("Active Moult")+theme_bw(base_size = 14)+ 
+  facet_wrap(.~gender)+
+  coord_cartesian(xlim = c(0, 13), ylim=c(0, 1))
+print(Moult_Month_Ringing + ggtitle("GDCS"))

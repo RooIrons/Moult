@@ -8,7 +8,7 @@
 
 # Clean the environment
 rm(list = ls())
-setwd("C:/Users/Rebecca Irons/Desktop/Thesis/Moult Code/Moult/R Scripts")
+setwd("C:/Users/bexir/OneDrive/Desktop/Academics/Thesis/Moult Code/Moult/R Scripts")
 
 # Libraries
 library(tidyverse)
@@ -53,7 +53,9 @@ count(nectarivores, Name)
 #9 White-bellied (breasted) Sunbird 1853
 
 library(sf)
+citation("sf")
 library(ggspatial)
+citation("ggspatial")
 
 Locations <- st_as_sf(nectarivores, coords = c("Longitude", "Latitude"), crs = 4326)
 class(Locations)
