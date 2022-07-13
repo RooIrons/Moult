@@ -12,7 +12,7 @@ safring_get_clean_data <- function(Spp_number=749, checkSABAP2=TRUE, filterAdult
   ringing_data <- 
     read.csv(paste('https://api.birdmap.africa/safring/species/records_list/',SPP,'?format=csv',sep=""))
   
-  
+  ## intialising a dataframe: speeds up function --> for purposes of working in R. Start with empty holders. 
   checkCulmen=NA; checkHead=NA; checkmass=NA; checkTail=NA; checkTarsus=NA; checkWing=NA;  
   # ensure all metric data is numeric
   ringing_data$Mass <- as.numeric(as.character(ringing_data$Mass))
@@ -20,6 +20,8 @@ safring_get_clean_data <- function(Spp_number=749, checkSABAP2=TRUE, filterAdult
   ringing_data$Culmen <- as.numeric(as.character(ringing_data$Culmen)) 
   ringing_data$Head <- as.numeric(as.character(ringing_data$Head))
   ringing_data$Tarsus <- as.numeric(as.character(ringing_data$Tarsus))
+  ringing_data$Tail <- as.numeric(as.character(ringing_data$Tail))
+
   
   # fix a common issue: 0 is entered when value should be blank (these values cannot be 0)
   # SAFRING: create sql to fix these in your database: these will not be flagged in the biometric checks
@@ -36,7 +38,7 @@ safring_get_clean_data <- function(Spp_number=749, checkSABAP2=TRUE, filterAdult
   
   # first create a reference set with spp# 
   
-  checkmass <- ringing_data%>%filter(!is.na(Mass))%>%do(data.frame(lc=quantile(.$Mass, c(.05)), uq=quantile(.$Mass, c(.995)), n=length(.$Mass) ))
+  checkmass <- ringing_data%>%filter(!is.na(Mass))%>%do(data.frame(lc=quantile(.$Mass, c(.005)), uq=quantile(.$Mass, c(.995)), n=length(.$Mass) ))
   checkWing <- ringing_data%>%filter(!is.na(Wing))%>%do(data.frame(lcwing=quantile(.$Wing, c(.005)), uqwing=quantile(.$Wing, c(.995)), n=length(.$Wing)))
   checkTarsus <- ringing_data%>%filter(!is.na(Tarsus))%>%do(data.frame(lctarsus=quantile(.$Tarsus, c(.005)), uqtarsus=quantile(.$Tarsus, c(.995)), n=length(.$Tarsus)))
   checkHead <- ringing_data%>%filter(!is.na(Head))%>%do(data.frame(lcHead=quantile(.$Head, c(.005)), uqHead=quantile(.$Head, c(.995)), n=length(.$Head)))
@@ -133,6 +135,7 @@ safring_get_clean_data <- function(Spp_number=749, checkSABAP2=TRUE, filterAdult
   ringing_data$Geo_Quad_Score <- ringing_data$Latitude + ringing_data$Longitude
   ringing_data$West_East <- ifelse(ringing_data$Longitude<27, "West", "East")
   
+
   # 
     
   # End preprocessing
