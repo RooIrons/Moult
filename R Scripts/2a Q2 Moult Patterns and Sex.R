@@ -198,7 +198,7 @@ ggplot(data = filter(ringing_data2, !is.na(gender), !is.na(West_East)),
 ringing_data2 %>% group_by(Month) %>% tally
 
 
-temp <- ringing_data2 %>% group_by(Month) %>% tally
+temp <- ringing_data2 %>% group_by(gender) %>% group_by(Month) %>% tally
 temp$n
 temp$n_prop <- temp$n / max(temp$n)
 temp
@@ -249,3 +249,4 @@ Moult_Month_Ringing <- ggplot(temp, aes(x = Month, y = n_prop)) +
   facet_wrap(.~gender)+
   coord_cartesian(xlim = c(0, 13), ylim=c(0, 1))
 print(Moult_Month_Ringing + ggtitle("GDCS"))
+
