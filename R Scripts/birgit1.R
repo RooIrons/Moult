@@ -4,12 +4,15 @@
 
 library(moult)
 
+rm(list = ls())
+
 SPP <- 758 #749
 
 #source("1 SAFRING data validation diagnostics for Bex.R")
 source("function_read_clean_safring_data.R")
 
 ringing_data <- safring_get_clean_data(Spp_number = 758, checkSABAP2 = F)
+
 
 if (is.numeric(ringing_data$Moult)) {
   scores <- format(ringing_data$Moult, scientific = FALSE, trim = TRUE)
