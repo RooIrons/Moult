@@ -5,6 +5,7 @@
 
 ## Get the SAFRING data
 
+
 safring_get_clean_data <- function(Spp_number=749, checkSABAP2=TRUE, filterAdults = TRUE, filterMoult = TRUE){
   library(tidyverse)
   SPP <- Spp_number
@@ -109,6 +110,8 @@ safring_get_clean_data <- function(Spp_number=749, checkSABAP2=TRUE, filterAdult
   ringing_data$Year <- format(ringing_data$Startdate, "%Y") 
   library(lubridate)
   ringing_data$Day <- yday(ringing_data$Startdate)
+  
+  citation("lubridate")
   
   # Moult_Month will offset months to focus over summer for visual display grouped by month
   

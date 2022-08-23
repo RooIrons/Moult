@@ -9,6 +9,9 @@ setwd("C:/Users/Rebecca Irons/Desktop/Thesis/Moult Code/Moult/R Scripts")
 require(dplyr); require(ggplot2); library(broom) # packages for data manipulation
 # library(RCurl); library(rjson) # packages to read SABAP/SAFRING data via api calls
 
+citation("rjson")
+citation("RCurl")
+
 # need a file of adu_names and numbers. Make sure this file is in the directory where the code will be run!
 
  adu_names <- read.csv("adu_species 2022-04-04.csv", stringsAsFactors = F)

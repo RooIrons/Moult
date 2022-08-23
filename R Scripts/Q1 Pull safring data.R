@@ -4,6 +4,9 @@
 
 
 library(moult)
+?moult
+citation()
+
 
 rm(list = ls())
 
@@ -47,6 +50,9 @@ sum(feather.mass)
 
 #feather.mass <- c(10.4, 10.8, 11.5, 12.8, 14.4, 15.6, 16.3, 15.7, 15.7)
 ## convert moult scores to proportion of feather mass grown
+sum(is.na(mscores))
+mscores <- mscores[!is.na(mscores)]
+
 ringing_data$pfmg <- ms2pfmg(mscores, feather.mass)
 
 hist(ringing_data$pfmg)
