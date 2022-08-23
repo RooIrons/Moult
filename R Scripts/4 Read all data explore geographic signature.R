@@ -97,6 +97,9 @@ summary(gam(active_moult ~ Month,data = CSB, family = binomial))
 
 CSB$csb_prediction <- predict(gam(active_moult ~ s(Month, by = factor(gender), bs="cc"),data = CSB, family = binomial), data = CSB)
 
+## bs = cc??
+## 
+
 max(CSB$csb_prediction)
 my_max_min <- group_by(CSB, gender) %>% summarise(Max = max(csb_prediction))
 my_max_min <- left_join(my_max_min, group_by(CSB, gender) %>% summarise(Min = min(csb_prediction)) )

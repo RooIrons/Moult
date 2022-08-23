@@ -203,7 +203,8 @@ ringing_data2  %>% group_by(Month) %>% tally
 
 temp <- ringing_data2  %>% group_by(Month) %>% tally
 
-temp <- ringing_data2  %>% group_by(gender) %>% group_by(Month) %>% tally
+
+temp <- ringing_data2  %>% filter(!is.na(gender))%>% group_by(gender, Month)  %>% tally 
 
 temp$n
 temp$n_prop <- temp$n / max(temp$n)
